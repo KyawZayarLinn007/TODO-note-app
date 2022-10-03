@@ -41,7 +41,7 @@ export default function Notes() {
         justifyContent="center"
         alignItems="center"
         spacing={0}
-        style={{ margin: "20px" }}
+        sx={{ margin: "20px" }}
       >
         <Button
           variant="contained"
