@@ -6,11 +6,12 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import IconButton from '@mui/material/IconButton';
+import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import EditIcon from '@mui/icons-material/Edit';
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import EditIcon from "@mui/icons-material/Edit";
 import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
 
 const Item = () => {
   return (
@@ -22,12 +23,16 @@ const Item = () => {
         <Typography variant="body1">well meaning and kindly.</Typography>
       </CardContent>
       <CardActions>
-        <IconButton aria-label="edit" size="small" color="success">
-          <EditIcon />
-        </IconButton>
-        <IconButton aria-label="delete" size="small" color="error">
-          <DeleteForeverIcon />
-        </IconButton>
+        <Tooltip title="Edit">
+          <IconButton aria-label="edit" size="small" color="success">
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Delete">
+          <IconButton aria-label="delete" size="small" color="error">
+            <DeleteForeverIcon />
+          </IconButton>
+        </Tooltip>
       </CardActions>
     </Card>
   );
