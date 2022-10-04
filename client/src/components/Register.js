@@ -109,11 +109,11 @@ export default function Register() {
 
           {/* confirm password */}
           <FormControl sx={{ m: 1, display: "block" }} variant="outlined">
-            <InputLabel htmlFor="outlined-adornment-password">
+            <InputLabel htmlFor="outlined-adornment-cpassword">
               Confirm Password
             </InputLabel>
             <OutlinedInput
-              id="outlined-adornment-password"
+              id="outlined-adornment-cpassword"
               type={cvalues.showPassword ? "text" : "password"}
               value={cvalues.password}
               onChange={handleConfirmChange("password")}

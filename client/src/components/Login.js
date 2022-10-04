@@ -11,8 +11,10 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default function Login() {
+  // password state
   const [values, setValues] = React.useState({
     amount: "",
     password: "",
@@ -20,6 +22,9 @@ export default function Login() {
     weightRange: "",
     showPassword: false,
   });
+
+  // email state
+  const [email, setEmail] = React.useState("");
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -34,6 +39,21 @@ export default function Login() {
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
+  };
+
+  const handleSubmit = () => {
+    console.log(`The email is ${email} and password is ${values.password}`);
+    axios.post("http://localhost:5000/login", {
+      email, password: values.password
+    })
+    .then(response => {
+      console.log(`The response is`);
+      console.log(response);
+    })
+    .catch(err => {
+      console.log(`The error is`);
+      console.log(err);
+    })
   };
 
   return (
@@ -57,6 +77,8 @@ export default function Login() {
               id="outlined-basic"
               label="Email"
               variant="outlined"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               fullWidth
             />
           </FormControl>
@@ -97,12 +119,9 @@ export default function Login() {
         alignItems="center"
         sx={{ marginTop: "20px" }}
       >
-        <Button variant="contained">Login</Button>
-        <Typography
-            variant="body1"
-            sx={{marginTop: "20px"}}
-        >
-            new to the site? <Link to="/register">Register</Link>
+        <Button variant="contained" onClick={handleSubmit}>Login</Button>
+        <Typography variant="body1" sx={{ marginTop: "20px" }}>
+          new to the site? <Link to="/register">Register</Link>
         </Typography>
       </Stack>
     </>

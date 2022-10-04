@@ -43,10 +43,7 @@ module.exports.login_post = async (req, res) => {
     try {
         let user = await Users.findOne({email});
         if(!user){
-            res.json({
-                error: "Email not registered!",
-                data: null
-            })
+            throw new Error("Email not registered");
         }
 
         let isPassword = await bcrypt.compare(password, user.password);
@@ -59,14 +56,11 @@ module.exports.login_post = async (req, res) => {
                 data: "login success"
             })
         }else{
-            res.json({
-                error: "Incorrect Password!",
-                data: null
-            })
+            throw new Error("Incorrect Password");
         }
     } catch (error) {
         res.json({
-            error: "Error occured",
+            error: error.message,
             data: null
         })
     }
