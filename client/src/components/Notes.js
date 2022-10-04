@@ -12,44 +12,138 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
-import TextField from '@mui/material/TextField';
+import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import Slide from '@mui/material/Slide';
+import Slide from "@mui/material/Slide";
 
 // notes item
 const Item = () => {
+  //edit open state
+  const [eopen, setEOpen] = React.useState(false);
+
+  const handleClickEditOpen = () => {
+    setEOpen(true);
+  };
+
+  const handleEditClose = () => {
+    setEOpen(false);
+  };
+
+  //delete open state
+  const [dopen, setDOpen] = React.useState(false);
+
+  const handleClickDeleteOpen = () => {
+    setDOpen(true);
+  };
+
+  const handleDeleteClose = () => {
+    setDOpen(false);
+  };
+
   return (
-    <Card>
-      <CardContent>
-        <Typography variant="h5" component="div">
-          Title
-        </Typography>
-        <Typography variant="body1">well meaning and kindly.</Typography>
-      </CardContent>
-      <CardActions>
-        <Tooltip title="Edit">
-          <IconButton aria-label="edit" size="small" color="success">
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Delete">
-          <IconButton aria-label="delete" size="small" color="error">
-            <DeleteForeverIcon />
-          </IconButton>
-        </Tooltip>
-      </CardActions>
-    </Card>
+    <>
+      {/* card item */}
+      <Card>
+        <CardContent>
+          <Typography variant="h5" component="div">
+            Title
+          </Typography>
+          <Typography variant="body1">well meaning and kindly.</Typography>
+        </CardContent>
+        <CardActions>
+          <Tooltip title="Edit">
+            <IconButton
+              aria-label="edit"
+              size="small"
+              color="success"
+              onClick={handleClickEditOpen}
+            >
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Delete">
+            <IconButton
+              aria-label="delete"
+              size="small"
+              color="error"
+              onClick={handleClickDeleteOpen}
+            >
+              <DeleteForeverIcon />
+            </IconButton>
+          </Tooltip>
+        </CardActions>
+      </Card>
+
+      {/* edit dialog */}
+      <Dialog
+        fullWidth={true}
+        open={eopen}
+        onClose={handleEditClose}
+        TransitionComponent={Transition}
+      >
+        <DialogTitle>Edit note</DialogTitle>
+        <DialogContent>
+          <TextField
+            margin="dense"
+            id="title"
+            label="Title"
+            type="text"
+            fullWidth
+            variant="outlined"
+          />
+          <TextField
+            margin="dense"
+            id="body"
+            label="Body"
+            type="text"
+            fullWidth
+            variant="outlined"
+            multiline
+            rows={4}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleEditClose}>Cancel</Button>
+          <Button onClick={handleEditClose} color="success">
+            Edit
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* delete dialog */}
+      <Dialog
+        fullWidth={true}
+        open={dopen}
+        onClose={handleDeleteClose}
+        TransitionComponent={Transition}
+      >
+        <DialogTitle>Delete note</DialogTitle>
+        <DialogContent>
+          <Typography variant="body1">
+            This note will be deleted forever! Are you sure to continue this operation?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteClose}>Cancel</Button>
+          <Button onClick={handleDeleteClose} color="error">
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 
+// dialog transition
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export default function Notes() {
+  // add open state
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -81,8 +175,13 @@ export default function Notes() {
         </Button>
       </Stack>
 
-      {/* dialog */}
-      <Dialog fullWidth={true} open={open} onClose={handleClose} TransitionComponent={Transition}>
+      {/* add dialog */}
+      <Dialog
+        fullWidth={true}
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Transition}
+      >
         <DialogTitle>Add new note</DialogTitle>
         <DialogContent>
           <TextField
