@@ -1,7 +1,16 @@
 require("dotenv").config();
-const jwt = require("json-web-token");
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const Users = require("../models/Users");
+
+const createToken = (id, email) => {
+    let payload = {
+        id, email
+    }
+
+    let token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: "1d"});
+    return token;
+}
 
 module.exports.register_post = async (req, res) => {
     const { email, password } = req.body;
@@ -12,12 +21,13 @@ module.exports.register_post = async (req, res) => {
 
     try {
         let user = await Users.create({email, password: hashedPassword});
+
+        let token = createToken(user._id, user.email);
+        res.cookie("token", token, {maxAge: 24 * 60 * 60 * 1000})
+
         res.json({
             error: null,
-            data: {
-                id: user._id,
-                email: user.email
-            }
+            data: payload
         })
     } catch (error) {
         res.json({
@@ -32,8 +42,18 @@ module.exports.login_post = async (req, res) => {
 
     try {
         let user = await Users.findOne({email});
+        if(!user){
+            res.json({
+                error: "Email not registered!",
+                data: null
+            })
+        }
+
         let isPassword = await bcrypt.compare(password, user.password);
         if(isPassword){
+            let token = createToken(user._id, user.email);
+            res.cookie("token", token, {maxAge: 24 * 60 * 60 * 1000})
+
             res.json({
                 error: null,
                 data: "login success"
@@ -46,7 +66,7 @@ module.exports.login_post = async (req, res) => {
         }
     } catch (error) {
         res.json({
-            error: "Email not registered!",
+            error: "Error occured",
             data: null
         })
     }
