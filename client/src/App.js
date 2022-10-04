@@ -4,10 +4,11 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import Notes from "./components/Notes";
 import Cookies from 'js-cookie';
+import { useState } from "react";
 
 const App = () => {
   //get user from cookie
-  let user = Cookies.get('token');
+  let [user, setUser] = useState(Cookies.get('token'));
 
   return ( 
     <>
@@ -18,7 +19,7 @@ const App = () => {
           user ? <Notes /> : <Navigate replace={true} to="/login" />
         }  />
         <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/logout" element={<Notes />} />
       </Routes>
     </>

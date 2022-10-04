@@ -10,10 +10,13 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate   } from "react-router-dom";
 import axios from "axios";
+import Cookies from 'js-cookie';
 
-export default function Login() {
+export default function Login({setUser}) {
+  const navigate = useNavigate();
+
   // password state
   const [values, setValues] = React.useState({
     amount: "",
@@ -49,10 +52,21 @@ export default function Login() {
     .then(response => {
       console.log(`The response is`);
       console.log(response);
+
+      if(!response.error){
+        //set user state
+        console.log(`The token is`);
+        console.log(Cookies.get("token"));
+        setUser(Cookies.get("token"));
+        navigate("/");
+      }else{
+        throw new Error(response.error)
+      }
     })
     .catch(err => {
       console.log(`The error is`);
       console.log(err);
+      navigate("/login");
     })
   };
 
