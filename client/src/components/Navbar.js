@@ -8,7 +8,7 @@ import { Link, NavLink } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 
-export default function Navbar() {
+export default function Navbar({ user }) {
   let activeStyle = {
     textDecoration: "underline",
   };
@@ -26,36 +26,37 @@ export default function Navbar() {
             <AutoStoriesIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <Link
-                to="/"
-                className="router-link"
-            >
-                Notes
+            <Link to="/" className="router-link">
+              Notes
             </Link>
           </Typography>
 
-          {/* register btn */}
-          <NavLink
-            to="/register"
-            className="router-link"
-            style={({ isActive }) => (isActive ? activeStyle : undefined)}
-          >
-            <Button color="inherit">Register</Button>
-          </NavLink>
-
-          {/* login btn */}
-          <NavLink
-            to="/login"
-            className="router-link"
-            style={({ isActive }) => (isActive ? activeStyle : undefined)}
-          >
-            <Button color="inherit">Login</Button>
-          </NavLink>
-
-          {/* logout btn */}
-          <Link to="/logout" className="router-link">
-            <Button color="inherit">Logout</Button>
-          </Link>
+          {/* conditional rendering btns */}
+          {user ? (
+            // logout btn
+            <Link to="/logout" className="router-link">
+              <Button color="inherit">Logout</Button>
+            </Link>
+          ) : (
+            <>
+              {/* register btn */}
+              <NavLink
+                to="/register"
+                className="router-link"
+                style={({ isActive }) => (isActive ? activeStyle : undefined)}
+              >
+                <Button color="inherit">Register</Button>
+              </NavLink>
+              {/* login btn */}
+              <NavLink
+                to="/login"
+                className="router-link"
+                style={({ isActive }) => (isActive ? activeStyle : undefined)}
+              >
+                <Button color="inherit">Login</Button>
+              </NavLink>
+            </>
+          )}
         </Toolbar>
       </AppBar>
     </Box>
