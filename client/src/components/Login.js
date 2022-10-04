@@ -46,7 +46,8 @@ export default function Login({setUser}) {
 
   const handleSubmit = () => {
     console.log(`The email is ${email} and password is ${values.password}`);
-    axios.post("http://localhost:5000/login", {
+    console.log(`${process.env.REACT_APP_SERVER_URI}/login`);
+    axios.post(`${process.env.REACT_APP_SERVER_URI}/login`, {
       email, password: values.password
     })
     .then(response => {

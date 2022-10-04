@@ -12,7 +12,7 @@ const App = () => {
 
   return ( 
     <>
-      <Navbar user={user} />
+      <Navbar user={user} setUser={setUser} />
       <Routes>
         {/* conditional rendering home page */}
         <Route path="/" element={

@@ -4,14 +4,40 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
+import axios from "axios";
+import Cookies from 'js-cookie';
+// import * as dotenv from 'dotenv'
+// dotenv.config();
 
-export default function Navbar({ user }) {
+export default function Navbar({ user, setUser }) {
   let activeStyle = {
     textDecoration: "underline",
   };
+
+  let navigate = useNavigate();
+
+  const handleLogout = () => {
+    axios.post(`${process.env.REACT_APP_SERVER_URI}/logout`, {})
+    .then(response => {
+      console.log(`The response is`);
+      console.log(response);
+
+      if(!response.error){
+        setUser(Cookies.get("token"));
+        navigate("/login");
+      }else{
+        throw new Error(response.error)
+      }
+    })
+    .catch(error => {
+      console.log(`The error is`);
+      console.log(error);
+    })
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" color="primary">
@@ -35,7 +61,7 @@ export default function Navbar({ user }) {
           {user ? (
             // logout btn
             <Link to="/logout" className="router-link">
-              <Button color="inherit">Logout</Button>
+              <Button color="inherit" onClick={handleLogout}>Logout</Button>
             </Link>
           ) : (
             <>

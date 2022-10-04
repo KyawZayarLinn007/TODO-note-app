@@ -65,3 +65,11 @@ module.exports.login_post = async (req, res) => {
         })
     }
 }
+
+module.exports.logout_post = (req, res) => {
+    res.clearCookie("token");
+    res.json({
+        error: null,
+        data: "token deleted"
+    })
+}
