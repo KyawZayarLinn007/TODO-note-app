@@ -10,9 +10,17 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import Cookies from 'js-cookie';
 
-export default function Register() {
+export default function Register({setUser}) {
+  let navigate = useNavigate();
+
+  //email state
+  const [email, setEmail] = React.useState("");
+
+  //password state
   const [values, setValues] = React.useState({
     amount: "",
     password: "",
@@ -21,6 +29,7 @@ export default function Register() {
     showPassword: false,
   });
 
+  //cofirm password state
   const [cvalues, setCValues] = React.useState({
     amount: "",
     password: "",
@@ -55,6 +64,27 @@ export default function Register() {
     event.preventDefault();
   };
 
+  const handleRegister = () => {
+    console.log(`The email is ${email}, the password is ${values.password} and the cpassword is ${cvalues.password}`);
+    axios.post(`${process.env.REACT_APP_SERVER_URI}/register`, {
+      email, 
+      password: values.password, 
+      confirm_password: cvalues.password
+    })
+    .then(response => {
+      if(!response.error){
+        setUser(Cookies.get("token"));
+        navigate("/");
+      }else{
+        throw new Error(response.error);
+      }
+    })
+    .catch(error => {
+      console.log(error);
+      navigate("/register");
+    })
+  }
+
   return (
     <>
       {/* heading */}
@@ -76,6 +106,8 @@ export default function Register() {
               id="outlined-basic"
               label="Email"
               variant="outlined"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               fullWidth
             />
           </FormControl>
@@ -143,7 +175,7 @@ export default function Register() {
         alignItems="center"
         sx={{ marginTop: "20px" }}
       >
-        <Button variant="contained">Register</Button>
+        <Button variant="contained" onClick={handleRegister}>Register</Button>
         <Typography
             variant="body1"
             sx={{marginTop: "20px"}}

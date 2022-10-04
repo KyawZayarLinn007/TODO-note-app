@@ -27,7 +27,10 @@ module.exports.register_post = async (req, res) => {
 
         res.json({
             error: null,
-            data: payload
+            data: {
+                id: user._id,
+                email: user.email
+            }
         })
     } catch (error) {
         res.json({
