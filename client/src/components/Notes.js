@@ -23,6 +23,9 @@ export default function Notes({user}) {
   console.log(`The user props info is ${user}`);
   let userId = user?.id;
 
+  let titleRef = React.useRef();
+  let bodyRef = React.useRef();
+
   React.useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_SERVER_URI}/notes/userId/${userId}`)
@@ -50,6 +53,28 @@ export default function Notes({user}) {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleAdd = () => {
+    let title = titleRef?.current?.value;
+    let body = bodyRef?.current?.value;
+
+    axios
+    .post(`${process.env.REACT_APP_SERVER_URI}/notes/userId/${userId}`, {title, body})
+    .then((response) => {
+      console.log(`The response is`);
+      console.log(response);
+      if (!response.error) {
+        setNotes(response.data.data);
+        setOpen(false);
+      } else {
+        throw new Error(response.error);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      setOpen(false);
+    });
+  }
 
   return (
     <>
@@ -81,6 +106,7 @@ export default function Notes({user}) {
       >
         <DialogTitle>Add new note</DialogTitle>
         <DialogContent>
+          {/* title field */}
           <TextField
             margin="dense"
             id="title"
@@ -88,7 +114,9 @@ export default function Notes({user}) {
             type="text"
             fullWidth
             variant="outlined"
+            inputRef={titleRef}
           />
+          {/* body field */}
           <TextField
             margin="dense"
             id="body"
@@ -98,11 +126,12 @@ export default function Notes({user}) {
             variant="outlined"
             multiline
             rows={4}
+            inputRef={bodyRef}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Add</Button>
+          <Button onClick={handleAdd}>Add</Button>
         </DialogActions>
       </Dialog>
 

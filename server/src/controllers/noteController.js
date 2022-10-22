@@ -4,7 +4,7 @@ const Notes = require("../models/Notes");
 module.exports.notes_get = async (req, res) => {
     let { userId } = req.params;
     try {
-        const notes = await Notes.find({user_id: userId});
+        const notes = await Notes.find({user_id: userId}).sort({ updatedAt: -1 });
         res.json({
             error: null,
             data: notes
@@ -24,9 +24,10 @@ module.exports.notes_post = async (req, res) => {
 
     try {
         const note = await Notes.create({title, body, user_id: userId});
+        const notes = await Notes.find({user_id: userId}).sort({ updatedAt: -1 });
         res.json({
             error: null,
-            data: note
+            data: notes
         });
     } catch (error) {
         res.json({
@@ -44,9 +45,10 @@ module.exports.notes_put = async (req, res) => {
 
     try {
         const note = await Notes.updateOne({user_id: userId, _id: noteId}, {title, body});
+        const notes = await Notes.find({user_id: userId}).sort({ updatedAt: -1 });
         res.json({
             error: null,
-            data: note
+            data: notes
         });
     } catch (error) {
         res.json({
@@ -63,9 +65,10 @@ module.exports.note_delete = async (req, res) => {
 
     try {
         const note = await Notes.deleteOne({_id: noteId, user_id: userId});
+        const notes = await Notes.find({user_id: userId}).sort({ updatedAt: -1 });
         res.json({
             error: null,
-            data: note
+            data: notes
         });
     } catch (error) {
         res.json({
