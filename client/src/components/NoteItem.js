@@ -16,15 +16,34 @@ import DialogTitle from "@mui/material/DialogTitle";
 import axios from "axios";
 
 const NoteItem = ({ Transition, title, body, id, setNotes, userId }) => {
+
   //edit open state
   const [eopen, setEOpen] = React.useState(false);
 
   //editId state
   const [editId, setEditId] = React.useState(null);
 
-  const handleClickEditOpen = (id) => {
-    setEOpen(true);
+  //title input state
+  let [titleInput, setTitleInput] = React.useState("");
+  //body input state
+  let [bodyInput, setBodyInput] = React.useState("");
+
+  console.log("The titleInput is", titleInput);
+  console.log("The bodyInput is", bodyInput);
+
+  const handleTitleChange = (e) => {
+    setTitleInput(e.target.value);
+  }
+
+  const handleBodyChange = (e) => {
+    setBodyInput(e.target.value);
+  }
+
+  const handleClickEditOpen = (id, title, body) => {
     setEditId(id)
+    setTitleInput(title);
+    setBodyInput(body);
+    setEOpen(true);
   };
 
   const handleEditClose = () => {
@@ -32,20 +51,20 @@ const NoteItem = ({ Transition, title, body, id, setNotes, userId }) => {
   };
 
   const handleEdit = (id) => {
-    //TODO
-    // title and body in req.body
-    axios.put(`${process.env.REACT_APP_SERVER_URI}/notes/userId/${userId}/noteId/${id}`)
+    axios.put(`${process.env.REACT_APP_SERVER_URI}/notes/userId/${userId}/noteId/${id}`, {title: titleInput, body: bodyInput})
     .then((response) => {
       console.log(`The response is`);
       console.log(response);
       if (!response.error) {
         setNotes(response.data.data);
+        setEOpen(false);
       } else {
         throw new Error(response.error);
       }
     })
     .catch((error) => {
       console.log(error);
+      setEOpen(false);
     });
   }
 
@@ -96,7 +115,7 @@ const NoteItem = ({ Transition, title, body, id, setNotes, userId }) => {
               aria-label="edit"
               size="small"
               color="success"
-              onClick={() => { handleClickEditOpen(id) }}
+              onClick={() => { handleClickEditOpen(id, title, body) }}
             >
               <EditIcon />
             </IconButton>
@@ -130,6 +149,8 @@ const NoteItem = ({ Transition, title, body, id, setNotes, userId }) => {
             type="text"
             fullWidth
             variant="outlined"
+            value={titleInput}
+            onChange={handleTitleChange}
           />
           <TextField
             margin="dense"
@@ -140,12 +161,13 @@ const NoteItem = ({ Transition, title, body, id, setNotes, userId }) => {
             variant="outlined"
             multiline
             rows={4}
+            value={bodyInput}
+            onChange={handleBodyChange}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleEditClose}>Cancel</Button>
-          {/* set handleEdit(editId) */}
-          <Button onClick={handleEditClose} color="success">
+          <Button onClick={() => { handleEdit(editId) }} color="success">
             Edit
           </Button>
         </DialogActions>
