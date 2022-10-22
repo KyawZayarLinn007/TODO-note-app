@@ -20,7 +20,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function Notes({user}) {
   let [notes, setNotes] = React.useState([]);
-  let userId = user.id;
+  console.log(`The user props info is ${user}`);
+  let userId = user?.id;
 
   React.useEffect(() => {
     axios
@@ -37,7 +38,7 @@ export default function Notes({user}) {
       .catch((error) => {
         console.log(error);
       });
-  });
+  }, []);
 
   // add open state
   const [open, setOpen] = React.useState(false);
