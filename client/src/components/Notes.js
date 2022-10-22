@@ -18,12 +18,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function Notes() {
+export default function Notes({user}) {
   let [notes, setNotes] = React.useState([]);
+  let userId = user.id;
 
   React.useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_SERVER_URI}/notes`)
+      .get(`${process.env.REACT_APP_SERVER_URI}/notes/userId/${userId}`)
       .then((response) => {
         console.log(`The response is`);
         console.log(response);

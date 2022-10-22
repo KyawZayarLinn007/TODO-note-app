@@ -25,7 +25,7 @@ const App = () => {
         }  />
         <Route path="/register" element={<Register setUser={setUser} />} />
         <Route path="/login" element={<Login setUser={setUser} />} />
-        <Route path="/logout" element={<Notes />} />
+        <Route path="/logout" element={<Notes user={user} />} />
       </Routes>
     </>
   );
