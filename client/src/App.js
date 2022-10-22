@@ -3,12 +3,17 @@ import Navbar from "./components/Navbar";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import Notes from "./components/Notes";
-import Cookies from 'js-cookie';
 import { useState } from "react";
+import { decodeToken } from "react-jwt";
+import Cookies from 'js-cookie';
 
 const App = () => {
-  //get user from cookie
-  let [user, setUser] = useState(Cookies.get('token'));
+  //decode jwt token
+  let decodedToken = decodeToken(Cookies.get('token'));
+
+  console.log(`The decodedToken is`, decodedToken);
+
+  let [user, setUser] = useState(decodedToken);
 
   return ( 
     <>

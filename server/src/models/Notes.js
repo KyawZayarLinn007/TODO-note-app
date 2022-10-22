@@ -9,6 +9,10 @@ const noteSchema = new Schema({
     body: {
         type: String,
         required: true
+    },
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user"
     }
 }, {
     timestamps: true

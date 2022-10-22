@@ -14,7 +14,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 
-const NoteItem = ({ Transition }) => {
+const NoteItem = ({ Transition, title, body }) => {
   //edit open state
   const [eopen, setEOpen] = React.useState(false);
 
@@ -43,9 +43,9 @@ const NoteItem = ({ Transition }) => {
       <Card>
         <CardContent>
           <Typography variant="h5" component="div">
-            Title
+            {title}
           </Typography>
-          <Typography variant="body1">well meaning and kindly.</Typography>
+          <Typography variant="body1">{body}</Typography>
         </CardContent>
         <CardActions>
           <Tooltip title="Edit">

@@ -8,9 +8,6 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import axios from "axios";
-import Cookies from 'js-cookie';
-// import * as dotenv from 'dotenv'
-// dotenv.config();
 
 export default function Navbar({ user, setUser }) {
   let activeStyle = {
@@ -26,7 +23,7 @@ export default function Navbar({ user, setUser }) {
       console.log(response);
 
       if(!response.error){
-        setUser(Cookies.get("token"));
+        setUser(null);
         navigate("/login");
       }else{
         throw new Error(response.error)

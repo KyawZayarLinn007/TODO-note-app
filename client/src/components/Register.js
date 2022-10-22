@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { decodeToken } from "react-jwt";
 import Cookies from 'js-cookie';
 
 export default function Register({setUser}) {
@@ -73,7 +74,8 @@ export default function Register({setUser}) {
     })
     .then(response => {
       if(!response.error){
-        setUser(Cookies.get("token"));
+        let decodedToken = decodeToken(Cookies.get('token'));
+        setUser(decodedToken);
         navigate("/");
       }else{
         throw new Error(response.error);

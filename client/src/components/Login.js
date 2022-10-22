@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Link, useNavigate   } from "react-router-dom";
 import axios from "axios";
+import { decodeToken } from "react-jwt";
 import Cookies from 'js-cookie';
 
 export default function Login({setUser}) {
@@ -55,10 +56,10 @@ export default function Login({setUser}) {
       console.log(response);
 
       if(!response.error){
+        //decode jwt token
+        let decodedToken = decodeToken(Cookies.get('token'));
         //set user state
-        console.log(`The token is`);
-        console.log(Cookies.get("token"));
-        setUser(Cookies.get("token"));
+        setUser(decodedToken);
         navigate("/");
       }else{
         throw new Error(response.error)

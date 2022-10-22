@@ -11,6 +11,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import NoteItem from "./NoteItem";
+import axios from "axios";
 
 // dialog transition
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -18,6 +19,25 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function Notes() {
+  let [notes, setNotes] = React.useState([]);
+
+  React.useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_SERVER_URI}/notes`)
+      .then((response) => {
+        console.log(`The response is`);
+        console.log(response);
+        if (!response.error) {
+          setNotes(response.data.data);
+        } else {
+          throw new Error(response.error);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   // add open state
   const [open, setOpen] = React.useState(false);
 
@@ -87,18 +107,15 @@ export default function Notes() {
       {/* notes */}
       <Box sx={{ flexGrow: 1, margin: 2 }}>
         <Grid container spacing={4}>
-          <Grid item xs={12} md={4} lg={3}>
-            <NoteItem Transition={Transition} />
-          </Grid>
-          <Grid item xs={12} md={4} lg={3}>
-            <NoteItem Transition={Transition} />
-          </Grid>
-          <Grid item xs={12} md={4} lg={3}>
-            <NoteItem Transition={Transition} />
-          </Grid>
-          <Grid item xs={12} md={4} lg={3}>
-            <NoteItem Transition={Transition} />
-          </Grid>
+          {
+            notes.map(note => {
+              return (
+                <Grid key={note._id} item xs={12} md={4} lg={3}>
+                  <NoteItem Transition={Transition} title={note.title} body={note.body} />
+                </Grid>
+              )
+            })
+          }
         </Grid>
       </Box>
     </>
