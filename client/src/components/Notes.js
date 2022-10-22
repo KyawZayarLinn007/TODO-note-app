@@ -142,7 +142,7 @@ export default function Notes({user}) {
             notes.map(note => {
               return (
                 <Grid key={note._id} item xs={12} md={4} lg={3}>
-                  <NoteItem Transition={Transition} title={note.title} body={note.body} />
+                  <NoteItem Transition={Transition} title={note.title} body={note.body} id={note._id} setNotes={setNotes} userId={userId} />
                 </Grid>
               )
             })

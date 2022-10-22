@@ -13,29 +13,72 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import axios from "axios";
 
-const NoteItem = ({ Transition, title, body }) => {
+const NoteItem = ({ Transition, title, body, id, setNotes, userId }) => {
   //edit open state
   const [eopen, setEOpen] = React.useState(false);
 
-  const handleClickEditOpen = () => {
+  //editId state
+  const [editId, setEditId] = React.useState(null);
+
+  const handleClickEditOpen = (id) => {
     setEOpen(true);
+    setEditId(id)
   };
 
   const handleEditClose = () => {
     setEOpen(false);
   };
 
+  const handleEdit = (id) => {
+    //TODO
+    // title and body in req.body
+    axios.put(`${process.env.REACT_APP_SERVER_URI}/notes/userId/${userId}/noteId/${id}`)
+    .then((response) => {
+      console.log(`The response is`);
+      console.log(response);
+      if (!response.error) {
+        setNotes(response.data.data);
+      } else {
+        throw new Error(response.error);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
   //delete open state
   const [dopen, setDOpen] = React.useState(false);
 
-  const handleClickDeleteOpen = () => {
+  //deleteId state
+  const [deleteId, setDeleteId] = React.useState(null);
+
+  const handleClickDeleteOpen = (id) => {
     setDOpen(true);
+    setDeleteId(id);
   };
 
   const handleDeleteClose = () => {
     setDOpen(false);
   };
+
+  const handleDelete = (id) => {
+    axios.delete(`${process.env.REACT_APP_SERVER_URI}/notes/userId/${userId}/noteId/${id}`)
+    .then((response) => {
+      console.log(`The response is`);
+      console.log(response);
+      if (!response.error) {
+        setNotes(response.data.data);
+      } else {
+        throw new Error(response.error);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
 
   return (
     <>
@@ -53,7 +96,7 @@ const NoteItem = ({ Transition, title, body }) => {
               aria-label="edit"
               size="small"
               color="success"
-              onClick={handleClickEditOpen}
+              onClick={() => { handleClickEditOpen(id) }}
             >
               <EditIcon />
             </IconButton>
@@ -63,7 +106,7 @@ const NoteItem = ({ Transition, title, body }) => {
               aria-label="delete"
               size="small"
               color="error"
-              onClick={handleClickDeleteOpen}
+              onClick={ () => { handleClickDeleteOpen(id) } }
             >
               <DeleteForeverIcon />
             </IconButton>
@@ -101,6 +144,7 @@ const NoteItem = ({ Transition, title, body }) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleEditClose}>Cancel</Button>
+          {/* set handleEdit(editId) */}
           <Button onClick={handleEditClose} color="success">
             Edit
           </Button>
@@ -123,7 +167,7 @@ const NoteItem = ({ Transition, title, body }) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDeleteClose}>Cancel</Button>
-          <Button onClick={handleDeleteClose} color="error">
+          <Button onClick={() => {handleDelete(deleteId)}} color="error">
             Confirm
           </Button>
         </DialogActions>
