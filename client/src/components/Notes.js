@@ -36,7 +36,7 @@ export default function Notes() {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  });
 
   // add open state
   const [open, setOpen] = React.useState(false);
