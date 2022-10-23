@@ -7,3 +7,24 @@ body {
   text-decoration: none;
   color: white;
 }
+
+.not_found_div {
+  width: 50%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.not_found_svg {
+  width: 75%;
+  height: 75%;
+}
+
+@media only screen and (max-width: 600px) {
+  .not_found_svg {
+    width: 100%;
+    height: 100%;
+  }
+  .not_found_div {
+    margin-top: 20px;
+  }
+}

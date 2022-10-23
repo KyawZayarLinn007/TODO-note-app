@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import Notes from "./components/Notes";
+import NotFound from "./components/NotFound";
 import { useState } from "react";
 import { decodeToken } from "react-jwt";
 import Cookies from 'js-cookie';
@@ -24,8 +25,8 @@ const App = () => {
           user ? <Notes user={user} /> : <Navigate replace={true} to="/login" />
         }  />
         <Route path="/register" element={<Register setUser={setUser} />} />
-        <Route path="/login" element={<Login setUser={setUser} />} />
-        <Route path="/logout" element={<Notes />} />
+        <Route path="/login" element={<Login setUser={setUser} />} /> 
+        <Route path="*" element={<NotFound />} /> 
       </Routes>
     </>
   );

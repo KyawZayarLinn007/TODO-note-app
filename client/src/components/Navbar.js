@@ -57,7 +57,7 @@ export default function Navbar({ user, setUser }) {
           {/* conditional rendering btns */}
           {user ? (
             // logout btn
-            <Link to="/logout" className="router-link">
+            <Link to="/" className="router-link">
               <Button color="inherit" onClick={handleLogout}>Logout</Button>
             </Link>
           ) : (
