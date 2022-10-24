@@ -22,11 +22,11 @@ export default function Navbar({ user, setUser }) {
       console.log(`The response is`);
       console.log(response);
 
-      if(!response.error){
+      if(!response.data.error){
         setUser(null);
         navigate("/login");
       }else{
-        throw new Error(response.error)
+        throw new Error(response.data.error)
       }
     })
     .catch(error => {

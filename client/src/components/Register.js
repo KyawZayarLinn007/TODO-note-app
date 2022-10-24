@@ -19,6 +19,9 @@ import { useFormik } from "formik";
 export default function Register({ setUser }) {
   let navigate = useNavigate();
 
+  //serverError state
+  let [serverError, setServerError] = React.useState("");
+
   //email state
   const [email, setEmail] = React.useState("");
 
@@ -66,29 +69,30 @@ export default function Register({ setUser }) {
     event.preventDefault();
   };
 
-  const handleRegister = (event) => {
-    event.preventDefault();
+  const handleRegister = (values) => {
 
     console.log(
-      `The email is ${email}, the password is ${values.password} and the cpassword is ${cvalues.password}`
+      `The email is ${values.email}, the password is ${values.password} and the cpassword is ${values.confirmPassword}`
     );
     axios
       .post(`${process.env.REACT_APP_SERVER_URI}/register`, {
-        email,
+        email: values.email,
         password: values.password,
-        confirm_password: cvalues.password,
+        confirm_password: values.confirmPassword,
       })
       .then((response) => {
-        if (!response.error) {
+        if (!response.data.error) {
           let decodedToken = decodeToken(Cookies.get("token"));
           setUser(decodedToken);
+          setServerError("");
           navigate("/");
         } else {
-          throw new Error(response.error);
+          throw new Error(response.data.error);
         }
       })
       .catch((error) => {
         console.log(error);
+        setServerError(error.message);
         navigate("/register");
       });
   };
@@ -98,10 +102,14 @@ export default function Register({ setUser }) {
 
     if (!values.email) {
       errors.email = "Required!";
-    }
+    }else if(!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)){
+      errors.email = "Invalid email address!"
+  }
 
     if (!values.password) {
       errors.password = "Required!";
+    }else if(values.password.length < 3){
+      errors.password = "Password must be at least 3 characters!"
     }
 
     if (!values.confirmPassword) {
@@ -138,6 +146,7 @@ export default function Register({ setUser }) {
       <form onSubmit={formik.handleSubmit}>
         <Stack direction="row" justifyContent="center" alignItems="center">
           <div>
+            <Typography variant="body2" className="formik_error">{ serverError }</Typography>
             {/* email */}
             <FormControl sx={{ m: 1, display: "block" }} variant="outlined">
               <TextField

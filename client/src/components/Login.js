@@ -19,6 +19,9 @@ import { useFormik } from "formik";
 export default function Login({ setUser }) {
   const navigate = useNavigate();
 
+  //serverError state
+  let [serverError, setServerError] = React.useState("");
+
   // password state
   const [values, setValues] = React.useState({
     amount: "",
@@ -46,33 +49,33 @@ export default function Login({ setUser }) {
     event.preventDefault();
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    console.log(`The email is ${email} and password is ${values.password}`);
+  const handleSubmit = (values) => {
+    console.log(`The email is ${values.email} and password is ${values.password}`);
     console.log(`${process.env.REACT_APP_SERVER_URI}/login`);
     axios
       .post(`${process.env.REACT_APP_SERVER_URI}/login`, {
-        email,
+        email: values.email,
         password: values.password,
       })
       .then((response) => {
         console.log(`The response is`);
         console.log(response);
 
-        if (!response.error) {
+        if (!response.data.error) {
           //decode jwt token
           let decodedToken = decodeToken(Cookies.get("token"));
           //set user state
           setUser(decodedToken);
+          setServerError("");
           navigate("/");
         } else {
-          throw new Error(response.error);
+          throw new Error(response.data.error);
         }
       })
       .catch((err) => {
         console.log(`The error is`);
         console.log(err);
+        setServerError(err.message);
         navigate("/login");
       });
   };
@@ -117,6 +120,7 @@ export default function Login({ setUser }) {
       <form onSubmit={formik.handleSubmit}>
         <Stack direction="row" justifyContent="center" alignItems="center">
           <div>
+          <Typography variant="body2" className="formik_error">{ serverError }</Typography>
             {/* email */}
             <FormControl sx={{ m: 1, display: "block" }} variant="outlined">
               <TextField
@@ -125,7 +129,10 @@ export default function Login({ setUser }) {
                 label="Email"
                 variant="outlined"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                    setEmail(e.target.value)
+                  }
+                }
                 fullWidth
                 {...formik.getFieldProps("email")}
               />

@@ -55,11 +55,11 @@ const NoteItem = ({ Transition, title, body, id, setNotes, userId }) => {
     .then((response) => {
       console.log(`The response is`);
       console.log(response);
-      if (!response.error) {
+      if (!response.data.error) {
         setNotes(response.data.data);
         setEOpen(false);
       } else {
-        throw new Error(response.error);
+        throw new Error(response.data.error);
       }
     })
     .catch((error) => {
@@ -88,10 +88,10 @@ const NoteItem = ({ Transition, title, body, id, setNotes, userId }) => {
     .then((response) => {
       console.log(`The response is`);
       console.log(response);
-      if (!response.error) {
+      if (!response.data.error) {
         setNotes(response.data.data);
       } else {
-        throw new Error(response.error);
+        throw new Error(response.data.error);
       }
     })
     .catch((error) => {
