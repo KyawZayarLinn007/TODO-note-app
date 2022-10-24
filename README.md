@@ -33,7 +33,7 @@ This project is created with:
 clone the project
 
 ```bash
-git clone https://github.com/KyawZayarLinn007/conFusion.git
+git clone https://github.com/KyawZayarLinn007/TODO-note-app.git
 ```
 
 add the following environment variable to your ./client/.env file
