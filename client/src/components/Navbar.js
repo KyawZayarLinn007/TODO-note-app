@@ -17,23 +17,24 @@ export default function Navbar({ user, setUser }) {
   let navigate = useNavigate();
 
   const handleLogout = () => {
-    axios.post(`${process.env.REACT_APP_SERVER_URI}/logout`, {})
-    .then(response => {
-      console.log(`The response is`);
-      console.log(response);
+    axios
+      .post(`${process.env.REACT_APP_SERVER_URI}/logout`, {})
+      .then((response) => {
+        console.log(`The response is`);
+        console.log(response);
 
-      if(!response.data.error){
-        setUser(null);
-        navigate("/login");
-      }else{
-        throw new Error(response.data.error)
-      }
-    })
-    .catch(error => {
-      console.log(`The error is`);
-      console.log(error);
-    })
-  }
+        if (!response.data.error) {
+          setUser(null);
+          navigate("/login");
+        } else {
+          throw new Error(response.data.error);
+        }
+      })
+      .catch((error) => {
+        console.log(`The error is`);
+        console.log(error);
+      });
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -56,10 +57,18 @@ export default function Navbar({ user, setUser }) {
 
           {/* conditional rendering btns */}
           {user ? (
-            // logout btn
-            <Link to="/" className="router-link">
-              <Button color="inherit" onClick={handleLogout}>Logout</Button>
-            </Link>
+            <>
+              {/* user email */}
+              <Link to="/" className="router-link nav_email" style={{marginRight: "20px"}}>
+                { user.email }
+              </Link>
+              {/* logout btn */}
+              <Link to="/" className="router-link">
+                <Button color="inherit" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </Link>
+            </>
           ) : (
             <>
               {/* register btn */}

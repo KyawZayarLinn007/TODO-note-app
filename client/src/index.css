@@ -32,4 +32,7 @@ body {
   .not_found_div {
     margin-top: 20px;
   }
+  .nav_email{
+    display: none;
+  }
 }
