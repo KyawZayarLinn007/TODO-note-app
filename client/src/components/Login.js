@@ -31,13 +31,6 @@ export default function Login({ setUser }) {
     showPassword: false,
   });
 
-  // email state
-  const [email, setEmail] = React.useState("");
-
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
   const handleClickShowPassword = () => {
     setValues({
       ...values,
@@ -128,13 +121,13 @@ export default function Login({ setUser }) {
                 name="email"
                 label="Email"
                 variant="outlined"
-                value={email}
-                onChange={(e) => {
-                    setEmail(e.target.value)
-                  }
-                }
                 fullWidth
-                {...formik.getFieldProps("email")}
+                onChange={(e) => {
+                  setServerError("");
+                  formik.handleChange(e);
+                }}
+                onBlur={formik.handleBlur}
+                value={formik.values.email}
               />
             </FormControl>
             {/* email error message */}
@@ -151,9 +144,12 @@ export default function Login({ setUser }) {
                 id="password"
                 name="password"
                 type={values.showPassword ? "text" : "password"}
-                value={values.password}
-                onChange={handleChange("password")}
-                {...formik.getFieldProps("password")}
+                onChange={(e) => {
+                  setServerError("");
+                  formik.handleChange(e);
+                }}
+                onBlur={formik.handleBlur}
+                value={formik.values.password}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton

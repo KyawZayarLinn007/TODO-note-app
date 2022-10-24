@@ -22,9 +22,6 @@ export default function Register({ setUser }) {
   //serverError state
   let [serverError, setServerError] = React.useState("");
 
-  //email state
-  const [email, setEmail] = React.useState("");
-
   //password state
   const [values, setValues] = React.useState({
     amount: "",
@@ -42,14 +39,6 @@ export default function Register({ setUser }) {
     weightRange: "",
     showPassword: false,
   });
-
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const handleConfirmChange = (prop) => (event) => {
-    setCValues({ ...cvalues, [prop]: event.target.value });
-  };
 
   const handleClickShowPassword = () => {
     setValues({
@@ -70,7 +59,6 @@ export default function Register({ setUser }) {
   };
 
   const handleRegister = (values) => {
-
     console.log(
       `The email is ${values.email}, the password is ${values.password} and the cpassword is ${values.confirmPassword}`
     );
@@ -154,10 +142,13 @@ export default function Register({ setUser }) {
                 name="email"
                 label="Email"
                 variant="outlined"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
                 fullWidth
-                {...formik.getFieldProps("email")}
+                onChange={(e) => {
+                  setServerError("");
+                  formik.handleChange(e);
+                }}
+                onBlur={formik.handleBlur}
+                value={formik.values.email}
               />
             </FormControl>
             {/* email error message */}
@@ -176,9 +167,12 @@ export default function Register({ setUser }) {
                 id="password"
                 name="password"
                 type={values.showPassword ? "text" : "password"}
-                value={values.password}
-                onChange={handleChange("password")}
-                {...formik.getFieldProps("password")}
+                onChange={(e) => {
+                  setServerError("");
+                  formik.handleChange(e);
+                }}
+                onBlur={formik.handleBlur}
+                value={formik.values.password}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -211,9 +205,12 @@ export default function Register({ setUser }) {
                 id="confirmPassword"
                 name="confirmPassword"
                 type={cvalues.showPassword ? "text" : "password"}
-                value={cvalues.password}
-                onChange={handleConfirmChange("password")}
-                {...formik.getFieldProps("confirmPassword")}
+                onChange={(e) => {
+                  setServerError("");
+                  formik.handleChange(e);
+                }}
+                onBlur={formik.handleBlur}
+                value={formik.values.confirmPassword}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
